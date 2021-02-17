@@ -9,10 +9,85 @@
   <meta name="author" content="Halemaster">
 
   <link rel="stylesheet" href="courageous_forces.css">
-
+  <script type="text/javascript" src="https://app.roll20.net/v2/js/jquery-1.9.1.js"></script>
+  <link rel="stylesheet" href="https://app.roll20.net/assets/base.css">
+  <link rel="stylesheet" href="https://app.roll20.net/assets/app.css">
+  <style type="text/css" title="charsheet">
+    .charsheet {
+      background-color: #ddd;
+      min-width: 800px;
+    }
+    .charsheet h2 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .charsheet label {
+      display: inline-block;
+      width: auto;
+    }
+    .charsheet input {
+      display: inline-block;
+      width: 165px;
+    }
+    .charsheet img {
+      max-height: 100px;
+    }
+    .charsheet textarea {
+      resize: both;
+      height: auto;
+    }
+    .charsheet div.sheet-centered {
+      text-align: center;
+      width: 100%;
+    }
+    .charsheet input.sheet-short {
+      width: 17%;
+    }
+    .charsheet .sheet-stats input {
+      margin-right: 8%;
+      width: 17%;
+    }
+    .charsheet div.sheet-right {
+      float: right;
+    }
+  </style>
 </head>
 
-<body>
-    <object type="text/html" data="courageous_forces.html" width="1600px" height="800px"></object>
+<body class="no-touch" style="cursor: auto;">
+  <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable" tabindex="-1" role="dialog" aria-labelledby="ui-id-10" style="outline: 0px; z-index: 10508; position: absolute; height: 680.8px; width: 941.8px; top: 30px; left: 506px; display: block;">
+    <div class="dialog characterdialog ui-dialog-content ui-widget-content" style="display: block; width: 902px; min-height: 0px; height: 614px;" scolltop="0" scrollleft="0">
+      <div class="dialog largedialog characterviewer" style="display: block;">
+        <div class="tab-content">
+          <form autocomplete="off" class="sheetform" _lpchecked="1">
+            <div id="content" class="charactersheet tab-pane charsheet lang-en" style="display: block;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    function sheetifyClass(c) {
+      $("div[class~='" + c + "']").each(function (index, element) {
+        $(this).removeClass(c);
+        $(this).addClass('sheet-' + c);
+      });
+    }
+
+    $("#content").load("courageous_forces.html", function() {
+      sheetifyClass('1colrow');
+      sheetifyClass('2colrow');
+      sheetifyClass('col');
+      sheetifyClass('right');
+      sheetifyClass('centered');
+      sheetifyClass('short');
+      sheetifyClass('stats');
+      $("button").each(function (index, element) {
+        $(this).addClass('btn');
+        $(this).addClass('ui-draggable');
+      });
+    });
+  </script>
 </body>
 </html>

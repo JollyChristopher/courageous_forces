@@ -1,0 +1,23 @@
+{
+  "name": "courageous_forces",
+  "version": "1.0.0",
+  "description": "TTRPG for a system I'm making",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -p 80 -o show_file.html .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halemaster/courageous_forces.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/halemaster/courageous_forces/issues"
+  },
+  "homepage": "https://github.com/halemaster/courageous_forces#readme",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
+}
