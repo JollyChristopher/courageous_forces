@@ -1,73 +1,127 @@
-<div class="1colrow">
+<div class="3colrow">
     <h2>Basics</h2>
     <div class="col centered">
-        <label>Name:</label><input type="text" name="attr_character_name" />
-        <label>Player:</label><input type="text" name="attr_player_name" />
-        <label>Level:</label><input type="number" name="attr_rank" />
-        <label>XP:</label><input type="number" name="attr_xp" />
+        <div class="inner-label">
+            <label>Name</label><input type="text" name="attr_character_name" />
+        </div>
         <br />
-        
-        <button type='roll' name='roll_pools' value='&{template:default} {{name=Force Roll}} {{successes=[[?{d4s?|0}d4>4!+?{d6s?|0}d6>4!+?{d8s?|0}d8>4!+?{d10s?|0}d10>4!+?{d12s?|0}d12>4!]]}} {{note=All 1s are removed from your guts and any Courage dice used are lost}}'>Apply Force</button>
-        <button type='roll' name='roll_pools' value='&{template:default} {{name=Damage Roll}} {{damage=[[1d?{Die Type?|4,4|6,6|8,8|10,10|12,12}]]}} {{note=If not the highest roll then take a wound with score equal to the roll plus current amount of wounds}}'>Analyze Damage</button>
+        <div class="inner-label">
+            <label>Background</label><textarea name="attr_background" rows="2"></textarea>
+        </div>
+        <br />
+        <div class="large pool">
+            <br />
+            <br />
+            <fieldset class="repeating_active">
+                <input type="checkbox" name="attr_die_selected" class="dice"><input type="hidden" name="attr_die_type" class="dice-value" value="6"><label></label>
+            </fieldset>
+        </div>
+        <br />
+        <label class="center">Active</label>
+        <!-- <button type='roll' name='roll_pools' value='&{template:default} {{name=Force Roll}} {{successes=[[?{d4s?|0}d4>4!+?{d6s?|0}d6>4!+?{d8s?|0}d8>4!+?{d10s?|0}d10>4!+?{d12s?|0}d12>4!]]}} {{note=All 1s are removed from your guts and any Courage dice used are lost}}'>Apply Force</button>
+        <button type='roll' name='roll_pools' value='&{template:default} {{name=Damage Roll}} {{damage=[[1d?{Die Type?|4,4|6,6|8,8|10,10|12,12}]]}} {{note=If not the highest roll then take a wound with score equal to the roll plus current amount of wounds}}'>Analyze Damage</button> -->
     </div>
-
-    <!-- <div class="col">
-        <img src="https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/kitchensink/logo.png" />
-    </div>     -->
-</div>
-
-<hr/>
-<div class="2colrow">
-    <div class="col">
-        <h2>Guts and Courage</h2>
-
-        <label>Guts d4</label><div class="right"><input type="number" name='attr_gutsd4' class='sheet-short' min="0"><input type="number" name='attr_gutsd4_max' class='sheet-short' min="0"></div>
-        <br />
-        <label>Guts d6</label><div class="right"><input type="number" name='attr_gutsd6' class='sheet-short' min="0"><input type="number" name='attr_gutsd6_max' class='sheet-short' min="0"></div>
-        <br />
-        <label>Guts d8</label><div class="right"><input type="number" name='attr_gutsd8' class='sheet-short' min="0"><input type="number" name='attr_gutsd8_max' class='sheet-short' min="0"></div>
-        <br />
-        <label>Guts d10</label><div class="right"><input type="number" name='attr_gutsd10' class='sheet-short' min="0"><input type="number" name='attr_gutsd10_max' class='sheet-short' min="0"></div>
-        <br />
-        <label>Guts d12</label><div class="right"><input type="number" name='attr_gutsd12' class='sheet-short' min="0"><input type="number" name='attr_gutsd12_max' class='sheet-short' min="0"></div>
-        <br />
-        <label>Courage</label><div class="right"><input type="number" name='attr_courage' class='sheet-short' min="0"></div>
-        <br />
-        <label>Wounds</label>
-        <fieldset class="repeating_wounds">
-            <textarea name="attr_wound_name" rows="1"></textarea>
-        </fieldset>
-    </div>
-
-    <div class="col">
-        <h2>Forces</h2>
-        <fieldset class="repeating_forces">
-            <div class="centered">
-                <label>Force</label><input type="text" name="attr_force_name" />
-                <label>Power</label><input type="number" name="attr_force_power" min="0" />
-                <br />
-                <label>Extras</label><textarea name="attr_force_extras"></textarea>
+    <div class="col centered">
+        <div class="3colrow">
+            <div class="col inner-row inner-label">
+                <label>Appearance</label>
+                <textarea name="attr_portrait" rows="5"></textarea>
             </div>
-        </fieldset>
+            <div class="col inner-row">
+                <div class="small pool">
+                    <input type="number" name="attr_xp" min="0" class="middle">
+                </div>
+                <br />
+                <label class="center">XP</label>
+            </div>
+            <div class="col">
+                <div class="small pool">
+                    <input type="number" name="attr_coins" min="0" class="middle">
+                </div>
+                <br />
+                <label class="center">Coins</label>
+            </div>
+        </div>
+        <br />
+        <div class="large pool">
+        </div>
+        <br />
+        <label class="center">Used</label>
+    </div>
+    <div class="col centered">
+        <div class="big pool">
+            
+        </div>
+        <br />
+        <label>Courage</label><input type="number" name='attr_courage_start' min="0">
+        <br />
+        <div class="inner-label">
+            <label>Gear</label><textarea name="attr_gear" rows="8"></textarea>
+        </div>
     </div>
 </div>
 
-<div class="2colrow">
-    <div class="col">    
-        <h2>Equipment</h2>
+<div class="3colrow">
+    <fieldset class="repeating_forces">
+        <div class="col outer-label inner-row">
+            <label>Force</label>
+            <input type="text" class="force-title" name="attr_force_name" />
+            <input type="number" class="tiny pool force-power" name="attr_force_power" />
+            <textarea name="attr_force_extra" rows="3" class="force-extras"></textarea>
+        </div>
+    </fieldset>
+</div>
 
-        <div class="centered"><label>Coins</label><input name="attr_coins" type="number" min="0"></input></div>
-        <fieldset class="repeating_items">
-            <div class="centered"><label>Item</label><input type="text" name="attr_item_name" /></div>
-        </fieldset>
+<div class="5colrow">
+    <div class="col inner-row">
+        <h2>Tier 1</h2>
+        <textarea name="attr_tier_1_desc" rows="5"></textarea>
+        <input type="checkbox" name="attr_tier_1_recovery_1" class="recovery" />
+        <br />
+        <br />
+        <div class="medium pool">
+        </div>
     </div>
-    <div class="col">
-        <h2>Background</h2>
-
-        <textarea name="attr_background" rows="4"></textarea>
-
-        <h2>Hooks</h2>
-
-        <textarea name="attr_hooks" rows="4"></textarea>    
-    </div>    
+    <div class="col inner-row">
+        <h2>Tier 2</h2>
+        <textarea name="attr_tier_2_desc" rows="5"></textarea>
+        <input type="checkbox" name="attr_tier_2_recovery_1" class="recovery" />
+        <input type="checkbox" name="attr_tier_2_recovery_2" class="recovery" />
+        <br />
+        <br />
+        <div class="medium pool">
+        </div>
+    </div>
+    <div class="col inner-row">
+        <h2>Tier 3</h2>
+        <textarea name="attr_tier_3_desc" rows="5"></textarea>
+        <input type="checkbox" name="attr_tier_3_recovery_1" class="recovery" />
+        <input type="checkbox" name="attr_tier_3_recovery_2" class="recovery" />
+        <input type="checkbox" name="attr_tier_3_recovery_3" class="recovery" />
+        <br />
+        <br />
+        <div class="medium pool">
+        </div>
+    </div>
+    <div class="col inner-row">
+        <h2>Tier 4</h2>
+        <textarea name="attr_tier_4_desc" rows="5"></textarea>
+        <input type="checkbox" name="attr_tier_4_recovery_1" class="recovery" />
+        <input type="checkbox" name="attr_tier_4_recovery_2" class="recovery" />
+        <input type="checkbox" name="attr_tier_4_recovery_3" class="recovery" />
+        <input type="checkbox" name="attr_tier_4_recovery_4" class="recovery" />
+        <br />
+        <br />
+        <div class="medium pool">
+        </div>
+    </div>
+    <div class="col inner-row">
+        <h2>Tier 5</h2>
+        <textarea name="attr_tier_5_desc" rows="5"></textarea>
+        <br />
+        <br />
+        <br />
+        <div class="medium pool">
+        </div>
+    </div>
 </div>
