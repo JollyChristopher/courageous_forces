@@ -8,50 +8,9 @@
   <meta name="description" content="The Courageous Character Sheet">
   <meta name="author" content="Halemaster">
 
-  <link rel="stylesheet" href="courageous_forces.css">
   <script type="text/javascript" src="https://app.roll20.net/v2/js/jquery-1.9.1.js"></script>
   <link rel="stylesheet" href="https://app.roll20.net/assets/base.css">
   <link rel="stylesheet" href="https://app.roll20.net/assets/app.css">
-  <style type="text/css" title="charsheet">
-    .charsheet {
-      background-color: #ddd;
-      min-width: 800px;
-    }
-    .charsheet h2 {
-      font-size: 2em;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    .charsheet label {
-      display: inline-block;
-      width: auto;
-    }
-    .charsheet input {
-      display: inline-block;
-      width: 165px;
-    }
-    .charsheet img {
-      max-height: 100px;
-    }
-    .charsheet textarea {
-      resize: both;
-      height: auto;
-    }
-    .charsheet div.sheet-centered {
-      text-align: center;
-      width: 100%;
-    }
-    .charsheet input.sheet-short {
-      width: 17%;
-    }
-    .charsheet .sheet-stats input {
-      margin-right: 8%;
-      width: 17%;
-    }
-    .charsheet div.sheet-right {
-      float: right;
-    }
-  </style>
 </head>
 
 <body class="no-touch" style="cursor: auto;">
@@ -68,21 +27,35 @@
   </div>
 
   <script type="text/javascript">
-    function sheetifyClass(c) {
-      $("div[class~='" + c + "']").each(function (index, element) {
-        $(this).removeClass(c);
-        $(this).addClass('sheet-' + c);
+    function sheetifyClasses() {
+      $("#content").find("*").each(function (index, element) {
+        let classes = [];
+        element.classList.forEach(function (c) {
+          classes.push(c);
+        });
+        classes.forEach(function (c) {
+          element.classList.remove(c);
+          element.classList.add('sheet-' + c);
+        });
       });
     }
 
+    $.ajax({
+      url: 'courageous_forces.css',
+      success: function(data) {
+        data = data.replaceAll(/.*{/ig, function(match) {
+          if(match === '.charsheet {') return match;
+          return '.charsheet ' + match;
+        });
+        console.log(data);
+        let sheet = document.createElement('style');
+        sheet.innerHTML = data;
+        document.head.appendChild(sheet);
+      }
+    });
+
     $("#content").load("courageous_forces.html", function() {
-      sheetifyClass('1colrow');
-      sheetifyClass('2colrow');
-      sheetifyClass('col');
-      sheetifyClass('right');
-      sheetifyClass('centered');
-      sheetifyClass('short');
-      sheetifyClass('stats');
+      sheetifyClasses();
       $("button").each(function (index, element) {
         $(this).addClass('btn');
         $(this).addClass('ui-draggable');
