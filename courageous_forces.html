@@ -13,13 +13,24 @@
             <br />
             <br />
             <fieldset class="repeating_active">
-                <input type="checkbox" name="attr_die_selected" class="dice"><input type="hidden" name="attr_die_type" class="dice-value" value="6"><label></label>
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
             </fieldset>
         </div>
         <br />
         <label class="center">Active</label>
-        <!-- <button type='roll' name='roll_pools' value='&{template:default} {{name=Force Roll}} {{successes=[[?{d4s?|0}d4>4!+?{d6s?|0}d6>4!+?{d8s?|0}d8>4!+?{d10s?|0}d10>4!+?{d12s?|0}d12>4!]]}} {{note=All 1s are removed from your guts and any Courage dice used are lost}}'>Apply Force</button>
-        <button type='roll' name='roll_pools' value='&{template:default} {{name=Damage Roll}} {{damage=[[1d?{Die Type?|4,4|6,6|8,8|10,10|12,12}]]}} {{note=If not the highest roll then take a wound with score equal to the roll plus current amount of wounds}}'>Analyze Damage</button> -->
+        <br />
+        <label>Change Die Type:</label>
+        <select name="attr_active_dice_type" class="dice-selection">
+            <option value="4">d4</option>
+            <option value="6" selected>d6</option>
+            <option value="8">d8</option>
+            <option value="10">d10</option>
+            <option value="12">d12</option>
+        </select>
+        <input type="hidden" name="attr_active_roll" value="0">
+        <input type="hidden" name="attr_courage_roll" value="0">
+        <button type="roll" name="roll_active" class="d6-dice" value='&{template:default} {{name=Action Roll}} {{active=[[@{active_roll}]]}} {{courage=[[@{courage_roll}]]}} {{note=Make Inactive dice that only rolled 1}}'>Roll Active</button>
+        <button type="action" name="act_makeinactive">Make Inactive &gt;</button>
     </div>
     <div class="col centered">
         <div class="3colrow">
@@ -44,13 +55,26 @@
         </div>
         <br />
         <div class="large pool">
+            <br />
+            <br />
+            <fieldset class="repeating_inactive">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
         <br />
-        <label class="center">Used</label>
+        <label class="center">Inactive</label>
+        <br />
+        <button type="action" name="act_makeactive">&lt; Make Active</button>
+        <input type="hidden" name="attr_inactive_roll" value="0">
+        <button type="roll" name="roll_active" class="d6-dice" value='&{template:default} {{name=Harm Roll}} {{inactive fails=[[@{inactive_roll}]]}} {{note=Move highest rolled dice to tier of injury equal to number of failures}}'>Roll Harm</button>
     </div>
     <div class="col centered">
         <div class="big pool">
-            
+            <br />
+            <br />
+            <fieldset class="repeating_courage">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
         <br />
         <label>Courage</label><input type="number" name='attr_courage_start' min="0">
@@ -63,11 +87,11 @@
 
 <div class="3colrow">
     <fieldset class="repeating_forces">
-        <div class="col outer-label inner-row">
+        <div class="outer-label inner-row">
             <label>Force</label>
-            <input type="text" class="force-title" name="attr_force_name" />
-            <input type="number" class="tiny pool force-power" name="attr_force_power" />
-            <textarea name="attr_force_extra" rows="3" class="force-extras"></textarea>
+            <input type="text" class="force-title" name="attr_forcename" />
+            <input type="number" class="tiny pool force-power" name="attr_forcepower" />
+            <textarea name="attr_forceextra" rows="3" class="force-extras"></textarea>
         </div>
     </fieldset>
 </div>
@@ -75,25 +99,51 @@
 <div class="5colrow">
     <div class="col inner-row">
         <h2>Tier 1</h2>
+        <br />
+        <p>Dice simply held</p>
+        <br />
+        <br />
         <textarea name="attr_tier_1_desc" rows="5"></textarea>
         <input type="checkbox" name="attr_tier_1_recovery_1" class="recovery" />
         <br />
         <br />
         <div class="medium pool">
+            <fieldset class="repeating_tier1">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
+        <br />
+        <button type="action" name="act_makeinjurytier1">v Make Injury</button>
+        <button type="action" name="act_healinjurytier1">^ Heal Injury</button>
+        <button type="action" name="act_scarinjurytier1">x Scar Injury</button>
     </div>
     <div class="col inner-row">
         <h2>Tier 2</h2>
+        <br />
+        <p>Dice simply held</p>
+        <br />
+        <br />
         <textarea name="attr_tier_2_desc" rows="5"></textarea>
         <input type="checkbox" name="attr_tier_2_recovery_1" class="recovery" />
         <input type="checkbox" name="attr_tier_2_recovery_2" class="recovery" />
         <br />
         <br />
         <div class="medium pool">
+            <fieldset class="repeating_tier2">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
+        <br />
+        <button type="action" name="act_makeinjurytier2">v Make Injury</button>
+        <button type="action" name="act_healinjurytier2">^ Heal Injury</button>
+        <button type="action" name="act_scarinjurytier2">x Scar Injury</button>
     </div>
     <div class="col inner-row">
         <h2>Tier 3</h2>
+        <br />
+        <p>Temporary Force at -1</p>
+        <br />
+        <br />
         <textarea name="attr_tier_3_desc" rows="5"></textarea>
         <input type="checkbox" name="attr_tier_3_recovery_1" class="recovery" />
         <input type="checkbox" name="attr_tier_3_recovery_2" class="recovery" />
@@ -101,10 +151,19 @@
         <br />
         <br />
         <div class="medium pool">
+            <fieldset class="repeating_tier3">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
+        <br />
+        <button type="action" name="act_makeinjurytier3">v Make Injury</button>
+        <button type="action" name="act_healinjurytier3">^ Heal Injury</button>
+        <button type="action" name="act_scarinjurytier3">x Scar Injury</button>
     </div>
     <div class="col inner-row">
         <h2>Tier 4</h2>
+        <br />
+        <p>Temporary Force at -1. Failed rolls cause Tier 1 harm roll.</p>
         <textarea name="attr_tier_4_desc" rows="5"></textarea>
         <input type="checkbox" name="attr_tier_4_recovery_1" class="recovery" />
         <input type="checkbox" name="attr_tier_4_recovery_2" class="recovery" />
@@ -113,15 +172,251 @@
         <br />
         <br />
         <div class="medium pool">
+            <fieldset class="repeating_tier4">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
+        <br />
+        <button type="action" name="act_makeinjurytier4">v Make Injury</button>
+        <button type="action" name="act_healinjurytier4">^ Heal Injury</button>
+        <button type="action" name="act_scarinjurytier4">x Scar Injury</button>
     </div>
     <div class="col inner-row">
         <h2>Tier 5</h2>
+        <br />
+        <p>Temporary Force at -2. All rolls cause Tier 2 harm roll.</p>
         <textarea name="attr_tier_5_desc" rows="5"></textarea>
         <br />
         <br />
         <br />
         <div class="medium pool">
+            <fieldset class="repeating_tier5">
+                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
+            </fieldset>
         </div>
+        <br />
+        <button type="action" name="act_makeinjurytier5">v Make Injury</button>
+        <button type="action" name="act_scarinjurytier5">x Scar Injury</button>
     </div>
 </div>
+
+<script type="text/worker">
+    const LEVELS = {
+        TRACE: 0,
+        DEBUG: 1,
+        INFO: 2,
+        WARN: 3,
+        ERROR: 4,
+        CRITICAL: 5
+    }
+    let log_level = LEVELS.TRACE;
+    function log(level, ...messages) {
+        let type = console.info;
+        switch(level) {
+            case LEVELS.DEBUG:
+            case LEVELS.INFO:
+                type = console.log;
+                break;
+            case LEVELS.WARN:
+                type = console.warn;
+                break;
+            case LEVELS.ERROR:
+            case LEVELS.CRITICAL:
+                type = console.error;
+                break;
+        }
+        type(messages.join());
+        if(level > LEVELS.WARN) console.trace();
+    }
+    function trace(...messages) {
+        log(LEVELS.TRACE, messages);
+    }
+    function debug(...messages) {
+        log(LEVELS.DEBUG, messages);
+    }
+    function info(...messages) {
+        log(LEVELS.INFO, messages);
+    }
+    function warn(...messages) {
+        log(LEVELS.WARN, messages);
+    }
+    function error(...messages) {
+        log(LEVELS.ERROR, messages);
+    }
+    function critical(...messages) {
+        log(LEVELS.CRITICAL, messages);
+    }
+    function getDice(type, callback) {
+        trace(`getting all dice from the ${type} pool`);
+        getSectionIDs(`repeating_${type}`, function (ids) {
+            debug(`got all dice ids: ${JSON.stringify(ids)}`);
+            getAttrs(ids.map(id => [`repeating_${type}_${id}_dieselected`, `repeating_${type}_${id}_dietype`]).flat(), function(values) {
+                debug(`got the following values: ${JSON.stringify(values)}`);
+                let diceCompile = {};
+                Object.keys(values).forEach(key => {
+                    if (key.endsWith('_dieselected')) {
+                        let id = key.substring(`repeating_${type}_`.length, key.length - '_dieselected'.length);
+                        if(!diceCompile[id]) diceCompile[id] = {id: id};
+                        diceCompile[id].selected = values[key];
+                    } else {
+                        let id = key.substring(`repeating_${type}_`.length, key.length - '_dietype'.length);
+                        if(!diceCompile[id]) diceCompile[id] = {id: id};
+                        diceCompile[id].type = values[key];
+                    }
+                });
+                debug(`compiled the following dice: ${JSON.stringify(diceCompile)}`);
+                let dice = Object.values(diceCompile);
+                debug(`rendered the following dice: ${JSON.stringify(dice)}`);
+                callback(dice);
+            });
+        });
+    }
+    on('change:active_dice_type', function(eventInfo) {
+        trace(`change:active_dice_type called with ${JSON.stringify(eventInfo)}`);
+        getDice('active', function(dice) {
+            let setVals = {};
+            dice.forEach((die) => {
+                if(die.selected === 'on') {
+                    setVals[`repeating_active_${die['id']}_dietype`] = eventInfo.newValue;
+                }
+            });
+            debug(`setting the following dice faces: ${JSON.stringify(setVals)}`);
+            setAttrs(setVals);
+        });
+    });
+    on('change:repeating_active', function(eventInfo) {
+        trace(`change:repeating_active called with ${JSON.stringify(eventInfo)}`);
+        getDice('active', function(dice) {
+            let setVals = {};
+            let roll = '';
+            dice.forEach((die) => {
+                if(die.selected === 'on') {
+                    if('' !== roll) roll += '+';
+                    roll += `1d${die.type}>4!`;
+                }
+            });
+            debug(`obtained the following roll value: ${roll}`);
+            setVals['active_roll'] = roll;
+            trace(`setting the following roll value: ${JSON.stringify(setVals)}`);
+            setAttrs(setVals);
+        });
+    });
+    on('change:repeating_courage', function(eventInfo) {
+        trace(`change:repeating_courage called with ${JSON.stringify(eventInfo)}`);
+        getDice('courage', function(dice) {
+            let setVals = {};
+            let roll = '';
+            dice.forEach((die) => {
+                if(die.selected === 'on') {
+                    if('' !== roll) roll += '+';
+                    roll += `1d${die.type}>4!`;
+                }
+            });
+            debug(`obtained the following roll value: ${roll}`);
+            setVals['courage_roll'] = roll;
+            trace(`setting the following roll value: ${JSON.stringify(setVals)}`);
+            setAttrs(setVals);
+        });
+    });
+    on('change:repeating_inactive', function(eventInfo) {
+        trace(`change:repeating_inactive called with ${JSON.stringify(eventInfo)}`);
+        getDice('inactive', function(dice) {
+            let setVals = {};
+            let roll = '';
+            dice.forEach((die) => {
+                if(die.selected === 'on') {
+                    if('' !== roll) roll += '+';
+                    roll += `1d${die.type}<3`;
+                }
+            });
+            debug(`obtained the following roll value: ${roll}`);
+            setVals['inactive_roll'] = roll;
+            trace(`setting the following roll value: ${JSON.stringify(setVals)}`);
+            setAttrs(setVals);
+        });
+    });
+    on('clicked:makeinactive', function() {
+        trace(`clicked:makeinactive triggered, remove selected courage dice and move active dice to inactive`);
+        getDice('courage', function(dice) {
+            dice.forEach(die => {
+                if(die.selected === 'on') removeRepeatingRow("repeating_courage_" + die.id);
+            });
+            getDice('active', function(dice) {
+                dice.forEach(die => {
+                    if(die.selected === 'on') {
+                        debug(`die will be made inactive: ${JSON.stringify(die)}`);
+                        removeRepeatingRow("repeating_active_" + die.id);
+                        let newrowid = generateRowID();
+                        let attrs = {};
+                        attrs[`repeating_inactive_${newrowid}_dietype`] = die.type;
+                        setAttrs(attrs);
+                    }
+                });
+            });
+        });
+    });
+    on('clicked:makeactive', function() {
+        trace(`clicked:makeactive triggered, move selected inactive dice to active`);
+        getDice('inactive', function(dice) {
+            dice.forEach(die => {
+                if(die.selected === 'on') {
+                    debug(`die will be made active: ${JSON.stringify(die)}`);
+                    removeRepeatingRow("repeating_inactive_" + die.id);
+                    let newrowid = generateRowID();
+                    let attrs = {};
+                    attrs[`repeating_active_${newrowid}_dietype`] = die.type;
+                    setAttrs(attrs);
+                }
+            });
+        });
+    });
+    const tiers = ['1','2','3','4','5'];
+    tiers.forEach(tier => {
+        on(`clicked:makeinjurytier${tier}`, function() {
+            trace(`clicked:makeinjurytier${tier} triggered, move selected inactive dice to injury tier ${tier}`);
+            getDice('inactive', function(dice) {
+                dice.forEach(die => {
+                    if(die.selected === 'on') {
+                        debug(`die will be made tier ${tier} injury: ${JSON.stringify(die)}`);
+                        removeRepeatingRow(`repeating_inactive_${die.id}`);
+                        let newrowid = generateRowID();
+                        let attrs = {};
+                        attrs[`repeating_tier${tier}_${newrowid}_dietype`] = die.type;
+                        setAttrs(attrs);
+                    }
+                });
+            });
+        });
+        on(`clicked:healinjurytier${tier}`, function() {
+            trace(`clicked:healinjurytier${tier} triggered, move selected tier ${tier} dice to inactive`);
+            getDice(`tier${tier}`, function(dice) {
+                dice.forEach(die => {
+                    if(die.selected === 'on') {
+                        debug(`die will be made inactive: ${JSON.stringify(die)}`);
+                        removeRepeatingRow(`repeating_tier${tier}_${die.id}`);
+                        let newrowid = generateRowID();
+                        let attrs = {};
+                        attrs[`repeating_inactive_${newrowid}_dietype`] = die.type;
+                        setAttrs(attrs);
+                    }
+                });
+            });
+        });
+        on(`clicked:scarinjurytier${tier}`, function() {
+            trace(`clicked:scarinjurytier${tier} triggered, delete selected tier ${tier} dice and create a Force`);
+            getDice(`tier${tier}`, function(dice) {
+                dice.forEach(die => {
+                    if(die.selected === 'on') {
+                        debug(`die will be made inactive: ${JSON.stringify(die)}`);
+                        removeRepeatingRow(`repeating_tier${tier}_${die.id}`);
+                        let newrowid = generateRowID();
+                        let attrs = {};
+                        attrs[`repeating_forces_${newrowid}_forcename`] = "Scar: ";
+                        attrs[`repeating_forces_${newrowid}_forcepower`] = "-1";
+                        setAttrs(attrs);
+                    }
+                });
+            });
+        });
+    });
+</script>

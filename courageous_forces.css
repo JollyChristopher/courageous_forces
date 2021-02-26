@@ -38,6 +38,52 @@ textarea {
 	width: calc(100% - 12px);
 }
 
+/* Repeating section styling */
+
+.repcontainer[data-groupname="repeating_courage"] > .repitem,
+.repcontainer[data-groupname="repeating_active"] > .repitem,
+.repcontainer[data-groupname="repeating_inactive"] > .repitem {
+	display: inline-block;
+	width: 96px;
+}
+
+.repcontainer[data-groupname="repeating_courage"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_active"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_inactive"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_tier1"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_tier2"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_tier3"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_tier4"] > .repitem > .itemcontrol,
+.repcontainer[data-groupname="repeating_tier5"] > .repitem > .itemcontrol {
+	text-align: left;
+}
+
+.repcontainer[data-groupname="repeating_tier1"] > .repitem,
+.repcontainer[data-groupname="repeating_tier2"] > .repitem,
+.repcontainer[data-groupname="repeating_tier3"] > .repitem,
+.repcontainer[data-groupname="repeating_tier4"] > .repitem,
+.repcontainer[data-groupname="repeating_tier5"] > .repitem {
+	display: inline-block;
+}
+
+.repcontrol[data-groupname="repeating_inactive"] > .btn,
+.repcontrol[data-groupname="repeating_tier1"] > .btn,
+.repcontrol[data-groupname="repeating_tier2"] > .btn,
+.repcontrol[data-groupname="repeating_tier3"] > .btn,
+.repcontrol[data-groupname="repeating_tier4"] > .btn,
+.repcontrol[data-groupname="repeating_tier5"] > .btn {
+	display: none;
+}
+
+.repcontainer[data-groupname="repeating_forces"] > .repitem {
+	display: inline-block;
+	width: calc(33% - 21px);
+}
+
+.repcontainer > .repitem > .itemcontrol {
+	z-index: 2;
+}
+
 /* Targetted styling that only effects elements with these classes */
 
 .sheet-5colrow {
@@ -145,6 +191,15 @@ div.sheet-centered {
 	width: 100%;
 }
 
+button[type=roll].sheet-d6-dice::before {
+	font-family: 'dicefontd6';
+	content: 'F ';
+}
+
+.sheet-dice-selection {
+	width: 25%;
+}
+
 input[type="checkbox"].sheet-dice {
 	opacity: 0;
 	height: 32px;
@@ -166,51 +221,51 @@ input[type="checkbox"].sheet-dice + input[type="hidden"].sheet-dice-value + labe
 }
 
 input[type="checkbox"].sheet-dice + input[value="4"].sheet-dice-value + label {
-	background:url("images/d4_unselected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d4_unselected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice:checked + input[value="4"].sheet-dice-value + label {
-	background:url("images/d4_selected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d4_selected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice + input[value="6"].sheet-dice-value + label {
-	background:url("images/d6_unselected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d6_unselected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice:checked + input[value="6"].sheet-dice-value + label {
-	background:url("images/d6_selected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d6_selected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice + input[value="8"].sheet-dice-value + label {
-	background:url("images/d8_unselected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d8_unselected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice:checked + input[value="8"].sheet-dice-value + label {
-	background:url("images/d8_selected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d8_selected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice + input[value="10"].sheet-dice-value + label {
-	background:url("images/d10_unselected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d10_unselected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice:checked + input[value="10"].sheet-dice-value + label {
-	background:url("images/d10_selected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d10_selected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice + input[value="12"].sheet-dice-value + label {
-	background:url("images/d12_unselected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d12_unselected.png") no-repeat;
 	background-size: 100%;
 }
 
 input[type="checkbox"].sheet-dice:checked + input[value="12"].sheet-dice-value + label {
-	background:url("images/d12_selected.png") no-repeat;
+	background:url("https://raw.githubusercontent.com/halemaster/courageous_forces/main/images/d12_selected.png") no-repeat;
 	background-size: 100%;
 }

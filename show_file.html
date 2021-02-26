@@ -18,15 +18,122 @@
     <div class="dialog characterdialog ui-dialog-content ui-widget-content" style="display: block; width: 902px; min-height: 0px; height: 614px;" scolltop="0" scrollleft="0">
       <div class="dialog largedialog characterviewer" style="display: block;">
         <div class="tab-content">
-          <form autocomplete="off" class="sheetform" _lpchecked="1">
-            <div id="content" class="charactersheet tab-pane charsheet lang-en" style="display: block;"></div>
-          </form>
+          <div id="content" class="charactersheet tab-pane charsheet lang-en" style="display: block;"></div>
         </div>
       </div>
     </div>
   </div>
 
   <script type="text/javascript">
+    let repeatingChanges = {};
+
+    function changeEvent(element, func) {
+      let prevValue = element.value;
+      element.onchange = function() {
+        func({
+          sourceAttribute: element.getAttribute('name'),
+          sourceType: 'player',
+          previousValue: prevValue,
+          newValue: element.value
+        });
+        prevValue = element.value;
+      }
+    }
+
+    function on(eventString, func) {
+      let events = eventString.split(' ');
+      events.forEach(event => {
+        let eventArray = event.split(':');
+        let type = eventArray[0];
+        let repeating = eventArray[1].startsWith('repeating_');
+        let topLevel = eventArray[1];
+        let target = eventArray[2];
+        switch (type) {
+          case 'change': {
+            if(repeating) {
+              let repeater = {func: func};
+              if(target) {
+                repeater.target = target;
+              }
+              repeatingChanges[topLevel] = repeater;
+            } else {
+              let targeter = `[name=attr_${topLevel}]`;
+              let elements = $(targeter);
+              elements.each((index, element) => changeEvent(element, func));
+            }
+            break;
+          }
+          case 'clicked': {
+            let element = $(`[name=act_${topLevel}]`)[0];
+            if(element) {
+              element.onclick = function() {
+                func();
+              }
+            }
+            break;
+          }
+        }
+      });
+    }
+
+    function getAttrs(attrs, callback) {
+      let values = {};
+      attrs.forEach(attr => {
+        let element;
+        if(attr.startsWith('repeating_')) {
+          let parent = 'repeating_' + attr.split('_')[1];
+          let id = attr.split('_')[2];
+          let type = attr.split('_')[3];
+          element = $(`[data-groupname=${parent}] > [data-reprowid=${id}] [name=attr_${type}]`)[0];
+        } else {
+          element = $(`[name=attr_${attr}]`)[0];
+        }
+        values[attr] = element.type === 'checkbox' ? (element.checked ? 'on' : '0') : element.value;
+      });
+      callback(values);
+    }
+
+    function setAttrs(values, options, callback) {
+      Object.entries(values).forEach(([attr, value]) => {
+        let element = $(`[name=attr_${attr}]`)[0];
+        if (!element && attr.startsWith('repeating_')) {
+          let parent = 'repeating_' + attr.split('_')[1];
+          let id = attr.split('_')[2];
+          let type = attr.split('_')[3];
+          element = $(`[data-groupname=${parent}] > [data-reprowid=${id}] [name=attr_${type}]`)[0];
+          if(!element) {
+            let container = $(`[data-groupname=${parent}]`)[0];
+            let html = $(`.sheet-${parent}`)[0].innerHTML;
+            addRepeater(container, html, parent, id);
+            element = $(`[data-groupname=${parent}] > [data-reprowid=${id}] [name=attr_${type}]`)[0];
+          }
+        }
+        if(element.type === 'checkbox') {
+          element.checked = value;
+        } else {
+          element.value = value;
+        }
+        if(element.onchange) element.onchange();
+      });
+      if(callback) callback();
+    }
+
+    function getSectionIDs(section_name, callback) {
+      callback($(`[data-groupname=${section_name}] > div`).toArray().map(element => element.getAttribute('data-reprowid')));
+    }
+
+    let currentRep = 0;
+    function generateRowID() {
+      return currentRep++;
+    }
+
+    function removeRepeatingRow(row) {
+      let parent = 'repeating_' + row.split('_')[1];
+      let id = row.split('_')[2];
+      let type = row.split('_')[3];
+      $(`[data-groupname=${parent}] > [data-reprowid=${id}]`).remove();
+    }
+
     function sheetifyClasses() {
       $("#content").find("*").each(function (index, element) {
         let classes = [];
@@ -40,6 +147,80 @@
       });
     }
 
+    function addRepeater(container, html, fieldId, repRow = generateRowID()) {
+      let repeater = document.createElement('div');
+      repeater.classList.add('repitem');
+      repeater.setAttribute('data-reprowid', repRow);
+      repeater.innerHTML = createRepeaterHtml(html);
+      container.appendChild(repeater);
+      let change = repeatingChanges[fieldId];
+      if(change) {
+        let target = `[data-groupname=${fieldId}] > [data-reprowid=${repRow}] > `;
+        if(change.target) {
+          target += `[name=attr_${target}`;
+        } else {
+          target += `[name^=attr_]`;
+        }
+        $(target).each((index, element) => changeEvent(element, change.func));
+      }
+      return repeater;
+    }
+
+    function deleteRepeater(row) {
+      row.parentNode.parentNode.parentNode.removeChild(row.parentNode.parentNode);
+    }
+
+    function createRepeaterHtml(baseHtml) {
+      return `<div class="itemcontrol">\n<button class="btn btn-danger pictos repcontrol_del" onclick="deleteRepeater(this)">#</button>\n<a class="btn repcontrol_move">≡</a>\n</div>\n${baseHtml}`;
+    }
+
+    function toggleModify(editButton, addButton, repcontainer) {
+      if('Done' === editButton.innerHTML) {
+        editButton.innerHTML = 'Modify';
+        addButton.style.display = '';
+        repcontainer.classList.remove('editmode');
+      } else {
+        editButton.innerHTML = 'Done';
+        addButton.style.display = 'none';
+        repcontainer.classList.add('editmode');
+      }
+    }
+
+    function repeatingFields() {
+      $("fieldset").each(function (index, element) {
+        element.style.display = 'none';
+        let className = element.className.substring(6);
+        // make repcontainer
+        let repcontainer = document.createElement('div');
+        repcontainer.classList.add('repcontainer');
+        repcontainer.classList.add('ui-sortable');
+        repcontainer.setAttribute('data-groupname', className);
+        element.parentNode.insertBefore(repcontainer, element.nextSibling);
+        // make repcontrol
+        let repcontrol = document.createElement('div');
+        repcontrol.classList.add('repcontrol');
+        repcontrol.setAttribute('data-groupname', className);
+        let editButton = document.createElement('button');
+        editButton.classList.add('btn');
+        editButton.classList.add('repcontrol_edit');
+        editButton.innerHTML = 'Modify';
+        let addButton = document.createElement('button');
+        addButton.classList.add('btn');
+        addButton.classList.add('repcontrol_add');
+        addButton.innerHTML = '+Add';
+        let html = element.innerHTML;
+        addButton.onclick = function () { 
+          addRepeater(repcontainer, html, className);
+        };
+        editButton.onclick = function () {
+          toggleModify(editButton, addButton, repcontainer);
+        }
+        repcontrol.appendChild(editButton);
+        repcontrol.appendChild(addButton);
+        element.parentNode.insertBefore(repcontrol, repcontainer.nextSibling);
+      });
+    }
+
     $.ajax({
       url: 'courageous_forces.css',
       success: function(data) {
@@ -47,7 +228,6 @@
           if(match === '.charsheet {') return match;
           return '.charsheet ' + match;
         });
-        console.log(data);
         let sheet = document.createElement('style');
         sheet.innerHTML = data;
         document.head.appendChild(sheet);
@@ -59,6 +239,10 @@
       $("button").each(function (index, element) {
         $(this).addClass('btn');
         $(this).addClass('ui-draggable');
+      });
+      repeatingFields();
+      $('script[type="text/worker"]').each(function (index, element) {
+        eval(element.innerHTML);
       });
     });
   </script>
