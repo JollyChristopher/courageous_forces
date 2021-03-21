@@ -96,15 +96,13 @@
     </fieldset>
 </div>
 
-<div class="5colrow">
+<div class="3colrow">
     <div class="col inner-row">
         <h2>Tier 1</h2>
         <br />
         <p>Dice simply held</p>
-        <br />
-        <br />
         <textarea name="attr_tier_1_desc" rows="5"></textarea>
-        <input type="checkbox" name="attr_tier_1_recovery_1" class="recovery" />
+        <label>Recovery: </label><input type="checkbox" name="attr_tier_1_recovery_1" class="recovery" />
         <br />
         <br />
         <div class="medium pool">
@@ -115,16 +113,13 @@
         <br />
         <button type="action" name="act_makeinjurytier1">v Make Injury</button>
         <button type="action" name="act_healinjurytier1">^ Heal Injury</button>
-        <button type="action" name="act_scarinjurytier1">x Scar Injury</button>
     </div>
     <div class="col inner-row">
         <h2>Tier 2</h2>
         <br />
-        <p>Dice simply held</p>
-        <br />
-        <br />
+        <p>Temporary Force at -1</p>
         <textarea name="attr_tier_2_desc" rows="5"></textarea>
-        <input type="checkbox" name="attr_tier_2_recovery_1" class="recovery" />
+        <label>Recovery: </label><input type="checkbox" name="attr_tier_2_recovery_1" class="recovery" />
         <input type="checkbox" name="attr_tier_2_recovery_2" class="recovery" />
         <br />
         <br />
@@ -136,18 +131,16 @@
         <br />
         <button type="action" name="act_makeinjurytier2">v Make Injury</button>
         <button type="action" name="act_healinjurytier2">^ Heal Injury</button>
-        <button type="action" name="act_scarinjurytier2">x Scar Injury</button>
     </div>
     <div class="col inner-row">
         <h2>Tier 3</h2>
         <br />
-        <p>Temporary Force at -1</p>
-        <br />
-        <br />
+        <p>Permanent Force at -1</p>
         <textarea name="attr_tier_3_desc" rows="5"></textarea>
-        <input type="checkbox" name="attr_tier_3_recovery_1" class="recovery" />
+        <label>Recovery: </label><input type="checkbox" name="attr_tier_3_recovery_1" class="recovery" />
         <input type="checkbox" name="attr_tier_3_recovery_2" class="recovery" />
         <input type="checkbox" name="attr_tier_3_recovery_3" class="recovery" />
+        <input type="checkbox" name="attr_tier_3_recovery_4" class="recovery" />
         <br />
         <br />
         <div class="medium pool">
@@ -158,45 +151,6 @@
         <br />
         <button type="action" name="act_makeinjurytier3">v Make Injury</button>
         <button type="action" name="act_healinjurytier3">^ Heal Injury</button>
-        <button type="action" name="act_scarinjurytier3">x Scar Injury</button>
-    </div>
-    <div class="col inner-row">
-        <h2>Tier 4</h2>
-        <br />
-        <p>Temporary Force at -1. Failed rolls cause Tier 1 harm roll.</p>
-        <textarea name="attr_tier_4_desc" rows="5"></textarea>
-        <input type="checkbox" name="attr_tier_4_recovery_1" class="recovery" />
-        <input type="checkbox" name="attr_tier_4_recovery_2" class="recovery" />
-        <input type="checkbox" name="attr_tier_4_recovery_3" class="recovery" />
-        <input type="checkbox" name="attr_tier_4_recovery_4" class="recovery" />
-        <br />
-        <br />
-        <div class="medium pool">
-            <fieldset class="repeating_tier4">
-                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
-            </fieldset>
-        </div>
-        <br />
-        <button type="action" name="act_makeinjurytier4">v Make Injury</button>
-        <button type="action" name="act_healinjurytier4">^ Heal Injury</button>
-        <button type="action" name="act_scarinjurytier4">x Scar Injury</button>
-    </div>
-    <div class="col inner-row">
-        <h2>Tier 5</h2>
-        <br />
-        <p>Temporary Force at -2. All rolls cause Tier 2 harm roll.</p>
-        <textarea name="attr_tier_5_desc" rows="5"></textarea>
-        <br />
-        <br />
-        <br />
-        <div class="medium pool">
-            <fieldset class="repeating_tier5">
-                <input type="checkbox" name="attr_dieselected" class="dice"><input type="hidden" name="attr_dietype" class="dice-value" value="6"><label></label>
-            </fieldset>
-        </div>
-        <br />
-        <button type="action" name="act_makeinjurytier5">v Make Injury</button>
-        <button type="action" name="act_scarinjurytier5">x Scar Injury</button>
     </div>
 </div>
 
@@ -370,7 +324,7 @@
             });
         });
     });
-    const tiers = ['1','2','3','4','5'];
+    const tiers = ['1','2','3'];
     tiers.forEach(tier => {
         on(`clicked:makeinjurytier${tier}`, function() {
             trace(`clicked:makeinjurytier${tier} triggered, move selected inactive dice to injury tier ${tier}`);
@@ -397,22 +351,6 @@
                         let newrowid = generateRowID();
                         let attrs = {};
                         attrs[`repeating_inactive_${newrowid}_dietype`] = die.type;
-                        setAttrs(attrs);
-                    }
-                });
-            });
-        });
-        on(`clicked:scarinjurytier${tier}`, function() {
-            trace(`clicked:scarinjurytier${tier} triggered, delete selected tier ${tier} dice and create a Force`);
-            getDice(`tier${tier}`, function(dice) {
-                dice.forEach(die => {
-                    if(die.selected === 'on') {
-                        debug(`die will be made inactive: ${JSON.stringify(die)}`);
-                        removeRepeatingRow(`repeating_tier${tier}_${die.id}`);
-                        let newrowid = generateRowID();
-                        let attrs = {};
-                        attrs[`repeating_forces_${newrowid}_forcename`] = "Scar: ";
-                        attrs[`repeating_forces_${newrowid}_forcepower`] = "-1";
                         setAttrs(attrs);
                     }
                 });

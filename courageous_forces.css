@@ -86,16 +86,6 @@ textarea {
 
 /* Targetted styling that only effects elements with these classes */
 
-.sheet-5colrow {
-	display: block;
-	clear: both;
-}
-
-.sheet-5colrow .sheet-col {
-	width: calc(20% - 21px);
-	margin-right: 30px;
-}
-
 input[type="checkbox"].sheet-recovery {
 	width: auto;
 }
